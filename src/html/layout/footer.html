@@ -1,0 +1,5 @@
+    <% for (var item in htmlWebpackPlugin.options.chunks ) { %>
+        <script src="<%= htmlWebpackPlugin.options.chunks[item] %>"></script>
+    <% } %>    
+</body>
+</html>

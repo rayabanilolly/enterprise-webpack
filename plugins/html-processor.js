@@ -1,4 +1,5 @@
-const htmlProcessor = require('htmlprocessor');
+const htmlProcessor = require('htmlprocessor'),
+    inputPath = 'src/html/pages/*.html';
 
 const data = {
     title: 'My Web App',
@@ -13,7 +14,8 @@ const options = {
 
 module.exports = function (source) {
     // Process the HTML content using the node-htmlprocessor module
-    const processedHTML = htmlProcessor(options);
+    const processor = new htmlProcessor(options),
+        processedHTML = processor.processContent(source, inputPath);
 
     return processedHTML;
 };
