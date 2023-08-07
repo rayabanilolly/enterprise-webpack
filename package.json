@@ -11,10 +11,16 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "os": "^0.1.2",
+    "path": "^0.12.7"
   },
   "devDependencies": {
+    "fs": "^0.0.1-security",
+    "html-loader": "^4.2.0",
+    "htmlprocessor": "^0.3.2",
     "serve": "^12.0.0",
+    "url": "^0.11.1",
     "webpack": "^5.38.1",
     "webpack-cli": "^4.7.2"
   }
