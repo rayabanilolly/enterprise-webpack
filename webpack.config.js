@@ -1,14 +1,18 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin'),
-  path = require('path'),
-  pages = require('./src/js/pages.js'),
-  Dotenv = require('dotenv-webpack');
-
+const path = require('path'),
+  config = require('./src/js/config.js'),
+  Dotenv = require('dotenv-webpack'),
+  TerserPlugin = require('terser-webpack-plugin'), 
+  MiniCssExtractPlugin = require('mini-css-extract-plugin');
+  
 module.exports = env => ({
-  mode: process.env.MODE,
-  entry: './src/js/index.js',
+  mode: 'development',
+  entry: {
+    main: './src/js/main.js',
+    ...config.entries.script
+  },
   output: {
-    filename: 'main.js',
     path: path.resolve(__dirname, 'dist'),
+    filename: 'js/[name].min.js'
   },
   module: {
     rules: [
@@ -18,6 +22,16 @@ module.exports = env => ({
           'html-loader', // First, use html-loader to import HTML files as strings
           './plugins/html-processor', // Then, use your custom htmlprocessor loader
         ],
+      }, {
+        test: /\.scss$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'sass-loader',      
+        ],
+      }, {
+        test: /\.js$/,
+        exclude: /node_modules/
       }
     ]
   },
@@ -25,11 +39,14 @@ module.exports = env => ({
     new Dotenv({
       path: `./.env.${env.production ? "production" : "development"}`
     }),
-    new HtmlWebpackPlugin({
-      template: "./src/html/pages/index.html",
-      chunks: ['index']
-    })
-  ].concat(pages),
+    new MiniCssExtractPlugin({
+      filename: 'css/[name].css',
+    }),
+  ].concat(config.entries.html),
+  optimization: {
+    minimize: true,
+    minimizer: [new TerserPlugin()],
+  },
   devServer: {
     static: {
       directory: path.join(__dirname, 'dist'),
